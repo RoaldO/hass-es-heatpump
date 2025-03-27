@@ -15,6 +15,18 @@ async def async_setup(hass: HomeAssistant, entry: ConfigEntry):
     """Set up the ES Heat Pump from a config entry."""
     _LOGGER.debug("async_setup()")
     hass.data.setdefault(DOMAIN, {})
+    _LOGGER.debug(f"{entry=}")
+    """
+        2025-03-27 20:41:01.142 ERROR (MainThread) [homeassistant.setup] Error during setup of component es: 'NodeDictClass' object has no attribute 'data'
+    Traceback (most recent call last):
+      File "/usr/src/homeassistant/homeassistant/setup.py", line 422, in _async_setup_component
+        result = await task
+                 ^^^^^^^^^^
+      File "/config/custom_components/es/__init__.py", line 18, in async_setup
+        hass.data[DOMAIN][entry.entry_id] = entry.data
+                                            ^^^^^^^^^^
+    AttributeError: 'NodeDictClass' object has no attribute 'data'
+    """
     hass.data[DOMAIN][entry.entry_id] = entry.data
     _LOGGER.debug("async_setup():RETURN")
     return True
