@@ -2,6 +2,7 @@
 Aggregation of the various constants that are available and relevant to our
 domain.
 """
+import logging
 from datetime import timedelta
 
 import homeassistant.helpers.config_validation as cv
@@ -10,6 +11,8 @@ import voluptuous as vol
 from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERATURE
 # noinspection PyUnresolvedReferences
 from homeassistant.const import CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD, CONF_NAME, UnitOfTemperature
+
+_LOGGER = logging.getLogger(f"es.{__name__}")
 
 __ALL__ = [
     "CONFIG_SCHEMA"

@@ -3,7 +3,9 @@
   "name": "ES Heat Pump",
   "documentation": "https://github.com/RoaldO/hass-es-heatpump",
   "dependencies": [],
-  "codeowners": ["@RoaldO"],
+  "codeowners": [
+    "@RoaldO"
+  ],
   "requirements": [],
   "version": "0.0.1",
   "iot_class": "cloud_polling"

@@ -6,7 +6,7 @@ from homeassistant.core import callback
 
 from . import const
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(f"es.{__name__}")
 
 DATA_SCHEMA = vol.Schema(
     {
@@ -17,6 +17,7 @@ DATA_SCHEMA = vol.Schema(
         vol.Optional(const.CONF_NAME, default=const.DEFAULT_NAME): str,
     }
 )
+
 
 class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
     """Handle a config flow for ES Heat Pump."""
@@ -43,6 +44,7 @@ class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         return EsHeatPumpOptionsFlowHandler(config_entry)
+
 
 class EsHeatPumpOptionsFlowHandler(config_entries.OptionsFlow):
     """Handle options flow."""

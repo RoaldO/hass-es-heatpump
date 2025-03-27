@@ -5,7 +5,7 @@ from homeassistant.helpers.entity import Entity
 
 from . import const
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(f"es.{__name__}")
 
 
 class TemperatureSensor(Entity):

@@ -7,7 +7,7 @@ from homeassistant.helpers.event import track_time_interval
 from es.sensor import TemperatureSensor
 from . import const
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger(f"es.{__name__}")
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
