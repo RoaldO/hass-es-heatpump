@@ -1,24 +1,24 @@
 import logging
+
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
-from homeassistant.const import CONF_NAME, CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD
 
-from .const import DOMAIN, DEFAULT_NAME
+from . import const
 
 _LOGGER = logging.getLogger(__name__)
 
 DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(CONF_URL): str,
-        vol.Required(CONF_API_KEY): str,
-        vol.Required(CONF_USERNAME): str,
-        vol.Required(CONF_PASSWORD): str,
-        vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
+        vol.Required(const.CONF_URL): str,
+        vol.Required(const.CONF_API_KEY): str,
+        vol.Required(const.CONF_USERNAME): str,
+        vol.Required(const.CONF_PASSWORD): str,
+        vol.Optional(const.CONF_NAME, default=const.DEFAULT_NAME): str,
     }
 )
 
-class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
     """Handle a config flow for ES Heat Pump."""
 
     VERSION = 1
@@ -28,14 +28,14 @@ class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            url = user_input[CONF_URL]
-            api_key = user_input[CONF_API_KEY]
-            username = user_input[CONF_USERNAME]
-            password = user_input[CONF_PASSWORD]
+            url = user_input[const.CONF_URL]
+            api_key = user_input[const.CONF_API_KEY]
+            username = user_input[const.CONF_USERNAME]
+            password = user_input[const.CONF_PASSWORD]
 
             # TODO: Perform a test API call here to validate credentials
 
-            return self.async_create_entry(title=user_input[CONF_NAME], data=user_input)
+            return self.async_create_entry(title=user_input[const.CONF_NAME], data=user_input)
 
         return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA, errors=errors)
 
