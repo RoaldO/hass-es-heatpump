@@ -6,6 +6,7 @@ from homeassistant.helpers.entity import Entity
 from . import const
 
 _LOGGER = logging.getLogger(f"es.{__name__}")
+_LOGGER.debug("initialization started")
 
 
 class TemperatureSensor(Entity):
@@ -55,3 +56,5 @@ class TemperatureSensor(Entity):
         except requests.RequestException as e:
             _LOGGER.error("Error fetching data from heat pump API: %s", e)
             self._available = False
+
+_LOGGER.debug("initialization done")

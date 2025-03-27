@@ -8,6 +8,7 @@ from es.sensor import TemperatureSensor
 from . import const
 
 _LOGGER = logging.getLogger(f"es.{__name__}")
+_LOGGER.debug("initialization started")
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -146,3 +147,5 @@ class HeatPumpEntity(ClimateEntity):
         except requests.RequestException as e:
             _LOGGER.error("Error fetching data from heat pump API: %s", e)
             self._available = False
+
+_LOGGER.debug("initialization done")

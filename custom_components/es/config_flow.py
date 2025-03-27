@@ -7,16 +7,7 @@ from homeassistant.core import callback
 from . import const
 
 _LOGGER = logging.getLogger(f"es.{__name__}")
-
-DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required(const.CONF_URL): str,
-        vol.Required(const.CONF_API_KEY): str,
-        vol.Required(const.CONF_USERNAME): str,
-        vol.Required(const.CONF_PASSWORD): str,
-        vol.Optional(const.CONF_NAME, default=const.DEFAULT_NAME): str,
-    }
-)
+_LOGGER.debug("initialization started")
 
 
 class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
@@ -38,7 +29,7 @@ class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
 
             return self.async_create_entry(title=user_input[const.CONF_NAME], data=user_input)
 
-        return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA, errors=errors)
+        return self.async_show_form(step_id="user", data_schema=const.DATA_SCHEMA, errors=errors)
 
     @staticmethod
     @callback
@@ -59,3 +50,5 @@ class EsHeatPumpOptionsFlowHandler(config_entries.OptionsFlow):
             return self.async_create_entry(title="", data=user_input)
 
         return self.async_show_form(step_id="init", data_schema=vol.Schema({}))
+
+_LOGGER.debug("initialization started")

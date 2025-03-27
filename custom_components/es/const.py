@@ -13,6 +13,7 @@ from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERA
 from homeassistant.const import CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD, CONF_NAME, UnitOfTemperature
 
 _LOGGER = logging.getLogger(f"es.{__name__}")
+_LOGGER.debug("initialization started")
 
 __ALL__ = [
     "CONFIG_SCHEMA"
@@ -23,6 +24,7 @@ __ALL__ = [
     "CONF_PASSWORD",
     "CONF_URL",
     "CONF_USERNAME",
+    "DATA_SCHEMA",
     "DEFAULT_MAX_TEMP",
     "DEFAULT_MIN_TEMP",
     "DEFAULT_NAME",
@@ -60,4 +62,16 @@ CONFIG_SCHEMA = vol.Schema(
     extra=vol.ALLOW_EXTRA,
 )
 
+DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_URL): str,
+        vol.Required(CONF_API_KEY): str,
+        vol.Required(CONF_USERNAME): str,
+        vol.Required(CONF_PASSWORD): str,
+        vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
+    }
+)
+
 TEMP_CELSIUS = UnitOfTemperature.CELSIUS
+
+_LOGGER.debug("initialization done")
