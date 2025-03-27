@@ -1,14 +1,15 @@
 import logging
+from datetime import timedelta
+
+import homeassistant.helpers.config_validation as cv
 import requests
 import voluptuous as vol
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERATURE
-from homeassistant.const import TEMP_CELSIUS, CONF_NAME, CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD
-import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.event import track_time_interval
-from datetime import timedelta
 
 from es.sensor import TemperatureSensor
+from . import const
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,13 +23,13 @@ UPDATE_INTERVAL = timedelta(minutes=1)
 
 CONFIG_SCHEMA = vol.Schema(
     {
-        DOMAIN: vol.Schema(
+        const.DOMAIN: vol.Schema(
             {
-                vol.Required(CONF_URL): cv.url,
-                vol.Required(CONF_API_KEY): cv.string,
-                vol.Required(CONF_USERNAME): cv.string,
-                vol.Required(CONF_PASSWORD): cv.string,
-                vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+                vol.Required(const.CONF_URL): cv.url,
+                vol.Required(const.CONF_API_KEY): cv.string,
+                vol.Required(const.CONF_USERNAME): cv.string,
+                vol.Required(const.CONF_PASSWORD): cv.string,
+                vol.Optional(const.CONF_NAME, default=DEFAULT_NAME): cv.string,
                 vol.Optional(CONF_MIN_TEMP, default=DEFAULT_MIN_TEMP): vol.Coerce(float),
                 vol.Optional(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): vol.Coerce(float),
             }
@@ -40,22 +41,40 @@ CONFIG_SCHEMA = vol.Schema(
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the heat pump platform."""
-    url = config[DOMAIN][CONF_URL]
-    api_key = config[DOMAIN][CONF_API_KEY]
-    username = config[DOMAIN][CONF_USERNAME]
-    password = config[DOMAIN][CONF_PASSWORD]
-    name = config[DOMAIN][CONF_NAME]
-    min_temp = config[DOMAIN][CONF_MIN_TEMP]
-    max_temp = config[DOMAIN][CONF_MAX_TEMP]
+    url = config[const.DOMAIN][const.CONF_URL]
+    api_key = config[const.DOMAIN][const.CONF_API_KEY]
+    username = config[const.DOMAIN][const.CONF_USERNAME]
+    password = config[const.DOMAIN][const.CONF_PASSWORD]
+    name = config[const.DOMAIN][const.CONF_NAME]
+    min_temp = config[const.DOMAIN][CONF_MIN_TEMP]
+    max_temp = config[const.DOMAIN][CONF_MAX_TEMP]
 
     climate_entity = HeatPumpEntity(name, url, api_key, username, password, min_temp, max_temp)
     sensor_entities = [
-        TemperatureSensor("Indoor Temperature", url, api_key, username, password, "current_temperature"),
-        TemperatureSensor("Outdoor Temperature", url, api_key, username, password, "outdoor_temperature")
+        TemperatureSensor(
+            "Indoor Temperature",
+            url,
+            api_key,
+            username,
+            password,
+            "current_temperature",
+        ),
+        TemperatureSensor(
+            "Outdoor Temperature",
+            url,
+            api_key,
+            username,
+            password,
+            "outdoor_temperature",
+        )
     ]
 
     add_entities([climate_entity] + sensor_entities)
-    track_time_interval(hass, lambda _: [entity.update() for entity in sensor_entities], UPDATE_INTERVAL)
+    track_time_interval(
+        hass,
+        lambda _: [entity.update() for entity in sensor_entities],
+        UPDATE_INTERVAL,
+    )
 
 
 class HeatPumpEntity(ClimateEntity):
@@ -79,7 +98,7 @@ class HeatPumpEntity(ClimateEntity):
 
     @property
     def temperature_unit(self):
-        return TEMP_CELSIUS
+        return const.TEMP_CELSIUS
 
     @property
     def current_temperature(self):
@@ -106,9 +125,15 @@ class HeatPumpEntity(ClimateEntity):
         return self._available
 
     def set_hvac_mode(self, hvac_mode):
-        response = requests.post(f"{self._url}/set_mode",
-                                 json={"api_key": self._api_key, "username": self._username, "password": self._password,
-                                       "mode": hvac_mode})
+        response = requests.post(
+            f"{self._url}/set_mode",
+            json={
+                "api_key": self._api_key,
+                "username": self._username,
+                "password": self._password,
+                "mode": hvac_mode,
+            },
+        )
         if response.status_code == 200:
             self._hvac_mode = hvac_mode
         self.update()
@@ -116,17 +141,29 @@ class HeatPumpEntity(ClimateEntity):
     def set_temperature(self, **kwargs):
         temperature = kwargs.get("temperature")
         if temperature is not None:
-            response = requests.post(f"{self._url}/set_temperature",
-                                     json={"api_key": self._api_key, "username": self._username,
-                                           "password": self._password, "temperature": temperature})
+            response = requests.post(
+                f"{self._url}/set_temperature",
+                json={
+                    "api_key": self._api_key,
+                    "username": self._username,
+                    "password": self._password,
+                    "temperature": temperature,
+                },
+            )
             if response.status_code == 200:
                 self._target_temperature = temperature
         self.update()
 
     def update(self):
         try:
-            response = requests.get(f"{self._url}/status", params={"api_key": self._api_key, "username": self._username,
-                                                                   "password": self._password})
+            response = requests.get(
+                f"{self._url}/status",
+                params={
+                    "api_key": self._api_key,
+                    "username": self._username,
+                    "password": self._password,
+                },
+            )
             if response.status_code == 200:
                 data = response.json()
                 self._current_temperature = data.get("current_temperature")
@@ -138,5 +175,3 @@ class HeatPumpEntity(ClimateEntity):
         except requests.RequestException as e:
             _LOGGER.error("Error fetching data from heat pump API: %s", e)
             self._available = False
-
-

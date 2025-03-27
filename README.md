@@ -22,6 +22,8 @@ Development
 -----------
 - When using Pycharm, make sure the `custom_components` folder is marked as 
   _Sources Root_.
+- from the project source root run `pylint custom_components/` (after installing
+  pylint in the python environment).
 
 Contributing
 ------------
