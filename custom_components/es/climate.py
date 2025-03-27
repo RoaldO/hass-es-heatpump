@@ -12,8 +12,6 @@ from es.sensor import TemperatureSensor
 
 _LOGGER = logging.getLogger(__name__)
 
-DOMAIN = "es"
-
 CONF_MIN_TEMP = "min_temp"
 CONF_MAX_TEMP = "max_temp"
 
