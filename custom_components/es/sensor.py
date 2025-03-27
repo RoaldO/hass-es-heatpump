@@ -1,14 +1,9 @@
 import logging
 import requests
-import voluptuous as vol
-from homeassistant.components.climate import ClimateEntity
-from homeassistant.components.climate.const import (
-    HVAC_MODE_HEAT, HVAC_MODE_COOL, HVAC_MODE_OFF, SUPPORT_TARGET_TEMPERATURE)
-from homeassistant.const import TEMP_CELSIUS, CONF_NAME, CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD
-import homeassistant.helpers.config_validation as cv
+from homeassistant.const import TEMP_CELSIUS
 from homeassistant.helpers.entity import Entity
-from homeassistant.helpers.event import track_time_interval
-from datetime import timedelta
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class TemperatureSensor(Entity):
