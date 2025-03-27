@@ -2,10 +2,59 @@
 Aggregation of the various constants that are available and relevant to our
 domain.
 """
+from datetime import timedelta
+
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
 # noinspection PyUnresolvedReferences
-from homeassistant.components.climate.const import *
+from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERATURE
 # noinspection PyUnresolvedReferences
-from homeassistant.const import *
+from homeassistant.const import CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD, CONF_NAME, UnitOfTemperature
+
+__ALL__ = [
+    "CONFIG_SCHEMA"
+    "CONF_API_KEY",
+    "CONF_MAX_TEMP",
+    "CONF_MIN_TEMP",
+    "CONF_NAME",
+    "CONF_PASSWORD",
+    "CONF_URL",
+    "CONF_USERNAME",
+    "DEFAULT_MAX_TEMP",
+    "DEFAULT_MIN_TEMP",
+    "DEFAULT_NAME",
+    "DOMAIN",
+    "HVACMode",
+    "SERVICE_SET_TEMPERATURE",
+    "TEMP_CELSIUS",
+    "UPDATE_INTERVAL",
+]
 
 DOMAIN = "es"
-DEFAULT_NAME = "default"
+
+CONF_MIN_TEMP = "min_temp"
+CONF_MAX_TEMP = "max_temp"
+
+DEFAULT_NAME = "Heat Pump"
+DEFAULT_MIN_TEMP = 16
+DEFAULT_MAX_TEMP = 30
+UPDATE_INTERVAL = timedelta(minutes=1)
+
+CONFIG_SCHEMA = vol.Schema(
+    {
+        DOMAIN: vol.Schema(
+            {
+                vol.Required(CONF_URL): cv.url,
+                vol.Required(CONF_API_KEY): cv.string,
+                vol.Required(CONF_USERNAME): cv.string,
+                vol.Required(CONF_PASSWORD): cv.string,
+                vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+                vol.Optional(CONF_MIN_TEMP, default=DEFAULT_MIN_TEMP): vol.Coerce(float),
+                vol.Optional(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): vol.Coerce(float),
+            }
+        )
+    },
+    extra=vol.ALLOW_EXTRA,
+)
+
+TEMP_CELSIUS = UnitOfTemperature.CELSIUS

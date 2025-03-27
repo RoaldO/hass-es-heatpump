@@ -1,3 +1,6 @@
+"""
+ES Heatpump integration, implemented using http calls to myheatpump.com.
+"""
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 

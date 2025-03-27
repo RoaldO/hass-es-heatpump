@@ -1,42 +1,13 @@
 import logging
-from datetime import timedelta
 
-import homeassistant.helpers.config_validation as cv
 import requests
-import voluptuous as vol
 from homeassistant.components.climate import ClimateEntity
-from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERATURE
 from homeassistant.helpers.event import track_time_interval
 
 from es.sensor import TemperatureSensor
 from . import const
 
 _LOGGER = logging.getLogger(__name__)
-
-CONF_MIN_TEMP = "min_temp"
-CONF_MAX_TEMP = "max_temp"
-
-DEFAULT_NAME = "Heat Pump"
-DEFAULT_MIN_TEMP = 16
-DEFAULT_MAX_TEMP = 30
-UPDATE_INTERVAL = timedelta(minutes=1)
-
-CONFIG_SCHEMA = vol.Schema(
-    {
-        const.DOMAIN: vol.Schema(
-            {
-                vol.Required(const.CONF_URL): cv.url,
-                vol.Required(const.CONF_API_KEY): cv.string,
-                vol.Required(const.CONF_USERNAME): cv.string,
-                vol.Required(const.CONF_PASSWORD): cv.string,
-                vol.Optional(const.CONF_NAME, default=DEFAULT_NAME): cv.string,
-                vol.Optional(CONF_MIN_TEMP, default=DEFAULT_MIN_TEMP): vol.Coerce(float),
-                vol.Optional(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): vol.Coerce(float),
-            }
-        )
-    },
-    extra=vol.ALLOW_EXTRA,
-)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -46,8 +17,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     username = config[const.DOMAIN][const.CONF_USERNAME]
     password = config[const.DOMAIN][const.CONF_PASSWORD]
     name = config[const.DOMAIN][const.CONF_NAME]
-    min_temp = config[const.DOMAIN][CONF_MIN_TEMP]
-    max_temp = config[const.DOMAIN][CONF_MAX_TEMP]
+    min_temp = config[const.DOMAIN][const.CONF_MIN_TEMP]
+    max_temp = config[const.DOMAIN][const.CONF_MAX_TEMP]
 
     climate_entity = HeatPumpEntity(name, url, api_key, username, password, min_temp, max_temp)
     sensor_entities = [
@@ -73,7 +44,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     track_time_interval(
         hass,
         lambda _: [entity.update() for entity in sensor_entities],
-        UPDATE_INTERVAL,
+        const.UPDATE_INTERVAL,
     )
 
 
@@ -88,7 +59,7 @@ class HeatPumpEntity(ClimateEntity):
         self._max_temp = max_temp
         self._current_temperature = None
         self._target_temperature = None
-        self._hvac_mode = HVACMode.OFF
+        self._hvac_mode = const.HVACMode.OFF
         self._available = False
         self.update()
 
@@ -114,11 +85,11 @@ class HeatPumpEntity(ClimateEntity):
 
     @property
     def hvac_modes(self):
-        return [HVACMode.HEAT, HVACMode.COOL, HVACMode.OFF]
+        return [const.HVACMode.HEAT, const.HVACMode.COOL, const.HVACMode.OFF]
 
     @property
     def supported_features(self):
-        return SERVICE_SET_TEMPERATURE
+        return const.SERVICE_SET_TEMPERATURE
 
     @property
     def available(self):
@@ -168,7 +139,7 @@ class HeatPumpEntity(ClimateEntity):
                 data = response.json()
                 self._current_temperature = data.get("current_temperature")
                 self._target_temperature = data.get("target_temperature")
-                self._hvac_mode = data.get("hvac_mode", HVACMode.OFF)
+                self._hvac_mode = data.get("hvac_mode", const.HVACMode.OFF)
                 self._available = True
             else:
                 self._available = False
