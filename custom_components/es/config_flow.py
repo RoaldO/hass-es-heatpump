@@ -6,7 +6,7 @@ from homeassistant.core import callback
 
 from . import const
 
-_LOGGER = logging.getLogger(f"es.{__name__}")
+_LOGGER = logging.getLogger(__name__)
 _LOGGER.debug("initialization started")
 
 

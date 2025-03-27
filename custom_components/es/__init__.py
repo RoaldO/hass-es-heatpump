@@ -8,7 +8,7 @@ from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
 
-_LOGGER = logging.getLogger("es")
+_LOGGER = logging.getLogger(__name__)
 _LOGGER.debug("initialization started")
 
 async def async_setup(hass: HomeAssistant, entry: ConfigEntry):

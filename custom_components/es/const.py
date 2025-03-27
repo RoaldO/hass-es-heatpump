@@ -12,7 +12,7 @@ from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERA
 # noinspection PyUnresolvedReferences
 from homeassistant.const import CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD, CONF_NAME, UnitOfTemperature
 
-_LOGGER = logging.getLogger(f"es.{__name__}")
+_LOGGER = logging.getLogger(__name__)
 _LOGGER.debug("initialization started")
 
 __ALL__ = [
