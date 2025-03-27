@@ -1,12 +1,23 @@
 {
   "domain": "es",
   "name": "ES Heat Pump",
+  "version": "0.0.1",
+  "integration_type": "device",
   "documentation": "https://github.com/RoaldO/hass-es-heatpump",
   "dependencies": [],
   "codeowners": [
     "@RoaldO"
   ],
+  "config_flow": true,
+  "single_config_entry": true,
   "requirements": [],
-  "version": "0.0.1",
+  "loggers": [
+    "es",
+    "es.climate",
+    "es.config_flow",
+    "es.const",
+    "es.sensor"
+  ],
+  "quality_scale": "custom",
   "iot_class": "cloud_polling"
 }

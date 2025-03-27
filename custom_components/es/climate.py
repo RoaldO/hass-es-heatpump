@@ -13,6 +13,7 @@ _LOGGER.debug("initialization started")
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the heat pump platform."""
+    _LOGGER.debug("setup_platform()")
     url = config[const.DOMAIN][const.CONF_URL]
     api_key = config[const.DOMAIN][const.CONF_API_KEY]
     username = config[const.DOMAIN][const.CONF_USERNAME]
@@ -51,6 +52,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 class HeatPumpEntity(ClimateEntity):
     def __init__(self, name, url, api_key, username, password, min_temp, max_temp):
+        _LOGGER.debug("HeatPumpEntity()")
         self._name = name
         self._url = url
         self._api_key = api_key
@@ -127,6 +129,7 @@ class HeatPumpEntity(ClimateEntity):
         self.update()
 
     def update(self):
+        _LOGGER.debug("HeatPumpEntity.update()")
         try:
             response = requests.get(
                 f"{self._url}/status",

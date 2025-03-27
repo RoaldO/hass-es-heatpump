@@ -17,6 +17,7 @@ class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
 
     async def async_step_user(self, user_input=None):
         """Handle the initial step."""
+        _LOGGER.debug("EsHeatPumpConfigFlow.async_step_user()")
         errors = {}
 
         if user_input is not None:
@@ -42,10 +43,12 @@ class EsHeatPumpOptionsFlowHandler(config_entries.OptionsFlow):
 
     def __init__(self, config_entry):
         """Initialize options flow."""
+        _LOGGER.debug("EsHeatPumpOptionsFlowHandler()")
         self.config_entry = config_entry
 
     async def async_step_init(self, user_input=None):
         """Manage the options."""
+        _LOGGER.debug("EsHeatPumpOptionsFlowHandler.async_step_init()")
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
