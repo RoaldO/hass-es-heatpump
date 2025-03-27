@@ -2,13 +2,13 @@ import logging
 import requests
 import voluptuous as vol
 from homeassistant.components.climate import ClimateEntity
-from homeassistant.components.climate.const import (
-    HVAC_MODE_HEAT, HVAC_MODE_COOL, HVAC_MODE_OFF, SUPPORT_TARGET_TEMPERATURE)
+from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERATURE
 from homeassistant.const import TEMP_CELSIUS, CONF_NAME, CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD
 import homeassistant.helpers.config_validation as cv
-from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.event import track_time_interval
 from datetime import timedelta
+
+from es.sensor import TemperatureSensor
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ class HeatPumpEntity(ClimateEntity):
         self._max_temp = max_temp
         self._current_temperature = None
         self._target_temperature = None
-        self._hvac_mode = HVAC_MODE_OFF
+        self._hvac_mode = HVACMode.OFF
         self._available = False
         self.update()
 
@@ -97,11 +97,11 @@ class HeatPumpEntity(ClimateEntity):
 
     @property
     def hvac_modes(self):
-        return [HVAC_MODE_HEAT, HVAC_MODE_COOL, HVAC_MODE_OFF]
+        return [HVACMode.HEAT, HVACMode.COOL, HVACMode.OFF]
 
     @property
     def supported_features(self):
-        return SUPPORT_TARGET_TEMPERATURE
+        return SERVICE_SET_TEMPERATURE
 
     @property
     def available(self):
@@ -133,7 +133,7 @@ class HeatPumpEntity(ClimateEntity):
                 data = response.json()
                 self._current_temperature = data.get("current_temperature")
                 self._target_temperature = data.get("target_temperature")
-                self._hvac_mode = data.get("hvac_mode", HVAC_MODE_OFF)
+                self._hvac_mode = data.get("hvac_mode", HVACMode.OFF)
                 self._available = True
             else:
                 self._available = False
