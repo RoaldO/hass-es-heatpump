@@ -4,7 +4,7 @@ import requests
 from homeassistant.components.climate import ClimateEntity
 from homeassistant.helpers.event import track_time_interval
 
-from es.sensor import TemperatureSensor
+from .sensor import TemperatureSensor
 from . import const
 
 _LOGGER = logging.getLogger(__name__)
