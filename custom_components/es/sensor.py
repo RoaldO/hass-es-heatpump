@@ -10,10 +10,9 @@ _LOGGER.debug("initialization started")
 
 
 class TemperatureSensor(Entity):
-    def __init__(self, name, url, api_key, username, password, field):
+    def __init__(self, name, url, username, password, field):
         self._name = name
         self._url = url
-        self._api_key = api_key
         self._username = username
         self._password = password
         self._field = field
@@ -42,7 +41,6 @@ class TemperatureSensor(Entity):
             response = requests.get(
                 f"{self._url}/status",
                 params={
-                    "api_key": self._api_key,
                     "username": self._username,
                     "password": self._password
                 }

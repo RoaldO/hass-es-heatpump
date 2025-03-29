@@ -15,19 +15,15 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the heat pump platform."""
     _LOGGER.debug("setup_platform()")
     url = config[const.DOMAIN][const.CONF_URL]
-    api_key = config[const.DOMAIN][const.CONF_API_KEY]
     username = config[const.DOMAIN][const.CONF_USERNAME]
     password = config[const.DOMAIN][const.CONF_PASSWORD]
     name = config[const.DOMAIN][const.CONF_NAME]
-    min_temp = config[const.DOMAIN][const.CONF_MIN_TEMP]
-    max_temp = config[const.DOMAIN][const.CONF_MAX_TEMP]
 
-    climate_entity = HeatPumpEntity(name, url, api_key, username, password, min_temp, max_temp)
+    climate_entity = HeatPumpEntity(name, url, username, password)
     sensor_entities = [
         TemperatureSensor(
             "Indoor Temperature",
             url,
-            api_key,
             username,
             password,
             "current_temperature",
@@ -35,7 +31,6 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         TemperatureSensor(
             "Outdoor Temperature",
             url,
-            api_key,
             username,
             password,
             "outdoor_temperature",
@@ -51,14 +46,12 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 
 class HeatPumpEntity(ClimateEntity):
-    def __init__(self, name, url, username, password, min_temp=10, max_temp=30):
+    def __init__(self, name, url, username, password):
         _LOGGER.debug("HeatPumpEntity()")
         self._name = name
         self._url = url
         self._username = username
         self._password = password
-        self._min_temp = min_temp
-        self._max_temp = max_temp
         self._current_temperature = None
         self._target_temperature = None
         self._hvac_mode = const.HVACMode.OFF
@@ -101,7 +94,6 @@ class HeatPumpEntity(ClimateEntity):
         response = requests.post(
             f"{self._url}/set_mode",
             json={
-                "api_key": self._api_key,
                 "username": self._username,
                 "password": self._password,
                 "mode": hvac_mode,
@@ -117,7 +109,6 @@ class HeatPumpEntity(ClimateEntity):
             response = requests.post(
                 f"{self._url}/set_temperature",
                 json={
-                    "api_key": self._api_key,
                     "username": self._username,
                     "password": self._password,
                     "temperature": temperature,

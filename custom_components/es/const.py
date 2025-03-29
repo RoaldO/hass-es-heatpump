@@ -10,7 +10,13 @@ import voluptuous as vol
 # noinspection PyUnresolvedReferences
 from homeassistant.components.climate.const import HVACMode, SERVICE_SET_TEMPERATURE
 # noinspection PyUnresolvedReferences
-from homeassistant.const import CONF_URL, CONF_API_KEY, CONF_USERNAME, CONF_PASSWORD, CONF_NAME, UnitOfTemperature
+from homeassistant.const import (
+    CONF_NAME,
+    CONF_PASSWORD,
+    CONF_URL,
+    CONF_USERNAME,
+    UnitOfTemperature,
+)
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.debug("initialization started")
