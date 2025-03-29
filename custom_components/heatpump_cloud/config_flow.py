@@ -1,50 +1,53 @@
 # <config_dir>/custom_components/heatpump_cloud/config_flow.py
-from __future__ import annotations
-import logging
-import voluptuous as vol
 from homeassistant import config_entries
-from .api import HeatPumpCloudAPI, AuthenticationError
-from .const import DOMAIN
+import voluptuous as vol
 
-_LOGGER = logging.getLogger(__name__)
-
-AUTH_SCHEMA = vol.Schema({
-    vol.Required("username"): str,
-    vol.Required("password"): str,
-    vol.Required("api_url", default="https://www.myheatpump.com"): str,
-    vol.Required("session_url", default="https://www.myheatpump.com/auth/session"): str,
-    vol.Required("mn"): str,  # New installation identifier field
+PARAM_MAPPING_SCHEMA = vol.Schema({
+    vol.Required("parameter"): vol.All(
+        vol.Coerce(int),
+        vol.Range(min=1, max=100)
+    ),
+    vol.Required("name"): str,
 })
 
 
 class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
-    async def async_step_user(self, user_input=None):
+    async def async_step_mapping(self, user_input=None):
+        """Step for adding parameter mappings"""
         errors = {}
+        mappings = self.mappings = self.handler.mappings
 
         if user_input is not None:
             try:
-                api = HeatPumpCloudAPI(
-                    username=user_input["username"],
-                    password=user_input["password"],
-                    api_url=user_input["api_url"],
-                    session_url=user_input["session_url"],
-                    mn=user_input["mn"]  # Add mn to API constructor
+                param = user_input["parameter"]
+                name = user_input["name"].strip().lower()
+
+                if any(m["name"] == name for m in mappings.values()):
+                    errors["base"] = "name_exists"
+                else:
+                    mappings[str(param)] = {"name": name}
+
+                return self.async_show_form(
+                    step_id="mapping",
+                    data_schema=PARAM_MAPPING_SCHEMA,
+                    errors=errors,
+                    description_placeholders={"mapped_count": len(mappings)}
                 )
-                await api.authenticate()
-                return self.async_create_entry(
-                    title=f"Heat Pump {user_input['mn']}",
-                    data=user_input
-                )
-            except AuthenticationError as err:
-                errors["base"] = "invalid_auth"
-                _LOGGER.error("Authentication failed: %s", err)
-            except Exception as err:
-                errors["base"] = "unknown"
-                _LOGGER.exception("Unexpected error")
+            except ValueError:
+                errors["base"] = "invalid_param"
 
         return self.async_show_form(
-            step_id="user",
-            data_schema=AUTH_SCHEMA,
-            errors=errors
+            step_id="mapping",
+            data_schema=PARAM_MAPPING_SCHEMA,
+            errors=errors,
+            description_placeholders={"mapped_count": 0}
         )
+
+    async def async_step_user(self, user_input=None):
+        """Modified user step with mapping configuration"""
+        # ... existing authentication logic ...
+
+        # After successful auth
+        self.mappings = {}
+        return await self.async_step_mapping()

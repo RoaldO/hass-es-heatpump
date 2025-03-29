@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b67ee599-b65f-4e9e-ab7b-b71f314743fc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/custom_components/heatpump_cloud/sensor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/heatpump_cloud/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/heatpump_cloud/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/climate.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/heatpump_cloud/climate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/heatpump_cloud/const.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/heatpump_cloud/manifest.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

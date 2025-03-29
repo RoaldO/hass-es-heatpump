@@ -1,4 +1,6 @@
 # <config_dir>/custom_components/heatpump_cloud/__init__.py
+PLATFORMS = ["climate", "sensor"]  # Add sensor platform
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up with installation identifier"""
     api = HeatPumpCloudAPI(
@@ -33,4 +35,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    # Add parameter mappings to coordinator data
+    coordinator.data["parameter_mappings"] = entry.data.get("parameter_mappings", {})
+
+    # Forward to both climate and sensor platforms
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    
     return True

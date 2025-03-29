@@ -1,4 +1,3 @@
-# <config_dir>/custom_components/heatpump_cloud/manifest.json
 {
     "domain": "heatpump_cloud",
     "name": "Heat Pump Cloud",

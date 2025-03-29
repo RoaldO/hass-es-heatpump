@@ -20,8 +20,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
 
 class HeatPumpClimate(ClimateEntity):
-    """Climate entity with cookie-based API"""
-
+    """Climate entity using consolidated sensor data"""
     def __init__(self, coordinator, api):
         self.coordinator = coordinator
         self._api = api
@@ -30,17 +29,29 @@ class HeatPumpClimate(ClimateEntity):
         self._attr_supported_features = SUPPORT_TARGET_TEMPERATURE
         self._attr_hvac_modes = SUPPORTED_MODES
 
+
     @property
     def current_temperature(self):
+        """Return the current temperature from parsed data"""
         return self.coordinator.data.get("current_temp")
 
     @property
     def target_temperature(self):
+        """Return the target temperature from parsed data"""
         return self.coordinator.data.get("target_temp")
 
     @property
     def hvac_mode(self):
+        """Return current operation mode from parsed data"""
         return self.coordinator.data.get("mode")
+
+    @property
+    def extra_state_attributes(self):
+        """Expose additional sensor data as attributes"""
+        return {
+            "outdoor_temperature": self.coordinator.data.get("outdoor_temp"),
+            "power_consumption": self.coordinator.data.get("power")
+        }
 
     async def async_set_temperature(self, **kwargs):
         temperature = kwargs.get(ATTR_TEMPERATURE)

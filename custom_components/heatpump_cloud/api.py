@@ -10,9 +10,9 @@ class HeatPumpCloudAPI:
         self._mn = mn
         self._session = aiohttp.ClientSession()
         self._authenticated = False
-        self._request_body = {  # Common request body
+        self._base_payload = {
             "mn": self._mn,
-            "devid": 1  # Hardcoded devid
+            "devid": 1  # Hardcoded device ID
         }
 
     async def authenticate(self):
@@ -40,23 +40,33 @@ class HeatPumpCloudAPI:
             raise AuthenticationError(f"Connection error: {str(err)}") from err
 
     async def async_get_status(self):
-        """Get status using POST request with mn and devid"""
+        """Get all sensor data from consolidated endpoint"""
         if not self._authenticated:
             await self.authenticate()
 
         async with self._session.post(
-                f"{self._api_url}/status",  # POST endpoint
-                json=self._request_body
+                "https://www.myheatpump.com/a/amt/realdata/get",
+                json=self._base_payload
         ) as resp:
             resp.raise_for_status()
-            return await resp.json()
+            data = await resp.json()
+
+            # Map the API response to our expected format
+            return {
+                "current_temp": data.get("roomTemp"),
+                "target_temp": data.get("setTemp"),
+                "mode": data.get("workMode"),
+                # Add other relevant fields from the response
+                "outdoor_temp": data.get("outdoorTemp"),
+                "power": data.get("powerConsumption")
+            }
 
     async def async_set_temperature(self, temperature: float):
-        """Set temperature with POST request"""
+        """Set temperature through dedicated endpoint (if still valid)"""
         if not self._authenticated:
             await self.authenticate()
 
-        payload = self._request_body.copy()
+        payload = self._base_payload.copy()
         payload.update({"temperature": temperature})
 
         async with self._session.post(
@@ -66,11 +76,11 @@ class HeatPumpCloudAPI:
             resp.raise_for_status()
 
     async def async_set_mode(self, mode: str):
-        """Set operation mode with POST request"""
+        """Set operation mode through dedicated endpoint (if still valid)"""
         if not self._authenticated:
             await self.authenticate()
 
-        payload = self._request_body.copy()
+        payload = self._base_payload.copy()
         payload.update({"mode": mode})
 
         async with self._session.post(
