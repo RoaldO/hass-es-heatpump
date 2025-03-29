@@ -51,7 +51,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 
 class HeatPumpEntity(ClimateEntity):
-    def __init__(self, name, url, api_key, username, password, min_temp, max_temp):
+    def __init__(self, name, url, api_key, username, password, min_temp=10, max_temp=30):
         _LOGGER.debug("HeatPumpEntity()")
         self._name = name
         self._url = url

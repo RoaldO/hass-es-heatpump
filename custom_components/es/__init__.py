@@ -41,15 +41,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = entry.data
 
-    url = hass.data[const.DOMAIN][entry.entry_id][const.CONF_URL]
-    api_key = hass.data[const.DOMAIN][entry.entry_id][const.CONF_API_KEY]
-    username = hass.data[const.DOMAIN][entry.entry_id][const.CONF_USERNAME]
-    password = hass.data[const.DOMAIN][entry.entry_id][const.CONF_PASSWORD]
     name = hass.data[const.DOMAIN][entry.entry_id][const.CONF_NAME]
+    # url = hass.data[const.DOMAIN][entry.entry_id][const.CONF_URL]
+    # api_key = hass.data[const.DOMAIN][entry.entry_id][const.CONF_API_KEY]
+    # username = hass.data[const.DOMAIN][entry.entry_id][const.CONF_USERNAME]
+    password = hass.data[const.DOMAIN][entry.entry_id][const.CONF_PASSWORD]
     # min_temp = hass.data[const.DOMAIN][entry.entry_id][const.CONF_MIN_TEMP]
     # max_temp = hass.data[const.DOMAIN][entry.entry_id][const.CONF_MAX_TEMP]
 
-    climate_entity = HeatPumpEntity(name, url, api_key, username, password) #, min_temp, max_temp)
+    climate_entity = HeatPumpEntity(name, "my-url", "my-api_key", "my-username", password) #, min_temp, max_temp)
 
     _LOGGER.debug("async_setup_entry():RETURN")
     return True
