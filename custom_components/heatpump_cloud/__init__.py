@@ -14,14 +14,15 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = ["climate"]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up with authenticated session"""
+    """Set up with configurable session endpoint"""
     api = HeatPumpCloudAPI(
-        entry.data["username"],
-        entry.data["password"],
-        entry.data["api_url"]
+        username=entry.data["username"],
+        password=entry.data["password"],
+        api_url=entry.data["api_url"],
+        session_url=entry.data["session_url"]
     )
 
-    # Verify authentication works during setup
+    # Rest of the setup remains the same
     try:
         await api.authenticate()
     except Exception as err:

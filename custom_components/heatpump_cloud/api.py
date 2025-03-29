@@ -8,17 +8,18 @@ _LOGGER = logging.getLogger(__name__)
 class HeatPumpCloudAPI:
     """API client for heat pump cloud service."""
 
-    def __init__(self, username: str, password: str, api_url: str):
+    def __init__(self, username: str, password: str, api_url: str, session_url: str):
         self._username = username
         self._password = password
         self._api_url = api_url
+        self._session_url = session_url
         self._session = aiohttp.ClientSession()
         self._authenticated = False
 
     async def authenticate(self):
-        """Two-step authentication with specific login URL"""
+        """Custom authentication flow with configurable session URL"""
         try:
-            # First authentication step to specific login endpoint
+            # First step: Fixed login endpoint
             async with self._session.post(
                     "https://www.myheatpump.com/a/login",
                     json={"username": self._username, "password": self._password}
@@ -26,18 +27,19 @@ class HeatPumpCloudAPI:
                 if response.status != 200:
                     raise AuthenticationError("Invalid credentials")
 
-            # Second step to get session cookie (using base API URL)
-            async with self._session.get(f"{self._api_url}/auth/session") as response:
+            # Second step: Configurable session endpoint
+            async with self._session.get(self._session_url) as response:
                 if response.status != 200:
                     raise AuthenticationError("Session setup failed")
 
-                # Verify cookie is present
+                # Verify cookie for API domain
                 if "JSESSIONID" not in self._session.cookie_jar.filter_cookies(self._api_url):
-                    raise AuthenticationError("Session cookie not received")
+                    raise AuthenticationError("Session cookie not found for API domain")
 
             self._authenticated = True
         except aiohttp.ClientError as err:
             raise AuthenticationError(f"Connection error: {str(err)}") from err
+
     async def async_get_status(self):
         """Get current status from API."""
         async with self._session.get(f"{self._api_url}/status") as resp:

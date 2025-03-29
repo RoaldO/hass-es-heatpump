@@ -1,4 +1,3 @@
-# <config_dir>/custom_components/heatpump_cloud/config_flow.py (updated)
 from __future__ import annotations
 import logging
 import voluptuous as vol
@@ -12,7 +11,9 @@ AUTH_SCHEMA = vol.Schema({
     vol.Required("username"): str,
     vol.Required("password"): str,
     vol.Required("api_url", default="https://www.myheatpump.com"): str,
+    vol.Required("session_url", default="https://www.myheatpump.com/auth/session"): str,
 })
+
 
 class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
@@ -22,18 +23,22 @@ class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 api = HeatPumpCloudAPI(
-                    user_input["username"],
-                    user_input["password"],
-                    user_input["api_url"]
+                    username=user_input["username"],
+                    password=user_input["password"],
+                    api_url=user_input["api_url"],
+                    session_url=user_input["session_url"]
                 )
                 await api.authenticate()
-                return self.async_create_entry(title="Heat Pump Cloud", data=user_input)
+                return self.async_create_entry(
+                    title="Heat Pump Cloud",
+                    data=user_input
+                )
             except AuthenticationError as err:
-                _LOGGER.error("Authentication failed: %s", err)
                 errors["base"] = "invalid_auth"
+                _LOGGER.error("Authentication failed: %s", err)
             except Exception as err:
-                _LOGGER.exception("Unexpected error")
                 errors["base"] = "unknown"
+                _LOGGER.exception("Unexpected error")
 
         return self.async_show_form(
             step_id="user",
