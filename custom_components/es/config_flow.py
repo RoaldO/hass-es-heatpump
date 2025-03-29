@@ -15,14 +15,7 @@ class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
     async def async_step_user(self, user_input):
         if user_input is not None:
             return self.async_create_entry(title=user_input[const.CONF_NAME], data=user_input)
-
-        return self.async_show_form(
-            step_id="user", data_schema=vol.Schema({
-                vol.Optional(const.CONF_NAME, default=const.DEFAULT_NAME): cv.string,
-                # vol.Required(const.CONF_URL): cv.url,
-                vol.Required("password"): str,
-            })
-        )
+        return self.async_show_form(step_id="user", data_schema=const.CONFIG_SCHEMA)
 
 
 #class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
