@@ -1,0 +1,11 @@
+# <config_dir>/custom_components/heatpump_cloud/manifest.json
+{
+    "domain": "heatpump_cloud",
+    "name": "Heat Pump Cloud",
+    "version": "0.0.10",
+    "requirements": ["aiohttp"],
+    "dependencies": [],
+    "codeowners": ["@RoaldO"],
+    "config_flow": true,
+    "iot_class": "cloud_polling"
+}
