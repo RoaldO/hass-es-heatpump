@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import logging
 
 import requests
@@ -11,38 +12,47 @@ _LOGGER = logging.getLogger(__name__)
 _LOGGER.debug("initialization started")
 
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the heat pump platform."""
-    _LOGGER.debug("setup_platform()")
-    url = config[const.DOMAIN][const.CONF_URL]
-    username = config[const.DOMAIN][const.CONF_USERNAME]
-    password = config[const.DOMAIN][const.CONF_PASSWORD]
-    name = config[const.DOMAIN][const.CONF_NAME]
+@dataclass(frozen=True)
+class Credentials:
+    username: str
+    password: str
 
-    climate_entity = HeatPumpEntity(name, url, username, password)
-    sensor_entities = [
-        TemperatureSensor(
-            "Indoor Temperature",
-            url,
-            username,
-            password,
-            "current_temperature",
-        ),
-        TemperatureSensor(
-            "Outdoor Temperature",
-            url,
-            username,
-            password,
-            "outdoor_temperature",
-        )
-    ]
 
-    add_entities([climate_entity] + sensor_entities)
-    track_time_interval(
-        hass,
-        lambda _: [entity.update() for entity in sensor_entities],
-        const.UPDATE_INTERVAL,
-    )
+# def setup_platform(hass, config, add_entities, discovery_info=None):
+#     """Set up the heat pump platform."""
+#     _LOGGER.debug("setup_platform()")
+#     url = config[const.DOMAIN][const.CONF_URL]
+#     username = config[const.DOMAIN][const.CONF_USERNAME]
+#     password = config[const.DOMAIN][const.CONF_PASSWORD]
+#     name = config[const.DOMAIN][const.CONF_NAME]
+#
+#     credentials = Credentials(
+#         username=config[const.DOMAIN][const.CONF_USERNAME],
+#         password=config[const.DOMAIN][const.CONF_PASSWORD],
+#     )
+#
+#     climate_entity = HeatPumpEntity(name, url, username, password)
+#     sensor_entities = [
+#         TemperatureSensor(
+#             "Indoor Temperature",
+#             url,
+#             credentials,
+#             "current_temperature",
+#         ),
+#         TemperatureSensor(
+#             "Outdoor Temperature",
+#             url,
+#             credentials,
+#             "outdoor_temperature",
+#         )
+#     ]
+#
+#     add_entities([climate_entity] + sensor_entities)
+#     track_time_interval(
+#         hass,
+#         lambda _: [entity.update() for entity in sensor_entities],
+#         const.UPDATE_INTERVAL,
+#     )
 
 
 class HeatPumpEntity(ClimateEntity):
