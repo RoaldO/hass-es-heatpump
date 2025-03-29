@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 import voluptuous as vol
 from homeassistant import config_entries
@@ -12,7 +13,10 @@ _LOGGER.debug("initialization started")
 
 
 class EsHeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
-    async def async_step_user(self, user_input):
+    async def async_step_user(
+            self,
+            user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
         if user_input is not None:
             return self.async_create_entry(title=user_input[const.CONF_NAME], data=user_input)
         return self.async_show_form(step_id="user", data_schema=const.CONFIG_SCHEMA)

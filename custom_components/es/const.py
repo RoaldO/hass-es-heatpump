@@ -54,28 +54,15 @@ CONFIG_SCHEMA = vol.Schema({
     vol.Required(CONF_JSESSIONID_URL): cv.string,
     vol.Required(CONF_MN): cv.string,
 })
-# CONFIG_SCHEMA = vol.Schema(
-#     {
-#         DOMAIN: vol.Schema(
-#             {
-#                 vol.Required(CONF_URL): cv.url,
-#                 vol.Required(CONF_USERNAME): cv.string,
-#                 vol.Required(CONF_PASSWORD): cv.string,
-#                 vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
-#             }
-#         )
-#     },
-#     extra=vol.ALLOW_EXTRA,
-# )
 
-DATA_SCHEMA = vol.Schema(
-    {
-        vol.Required(CONF_URL): str,
-        vol.Required(CONF_USERNAME): str,
-        vol.Required(CONF_PASSWORD): str,
-        vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
-    }
-)
+#DATA_SCHEMA = vol.Schema(
+#    {
+#        vol.Required(CONF_URL): str,
+#        vol.Required(CONF_USERNAME): str,
+#        vol.Required(CONF_PASSWORD): str,
+#        vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
+#    }
+#)
 
 TEMP_CELSIUS = UnitOfTemperature.CELSIUS
 

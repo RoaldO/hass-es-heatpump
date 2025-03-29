@@ -1,7 +1,7 @@
 {
   "domain": "es",
   "name": "ES Heat Pump",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "integration_type": "device",
   "documentation": "https://github.com/RoaldO/hass-es-heatpump",
   "dependencies": [],

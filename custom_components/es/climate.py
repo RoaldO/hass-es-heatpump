@@ -51,11 +51,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
 
 class HeatPumpEntity(ClimateEntity):
-    def __init__(self, name, url, api_key, username, password, min_temp=10, max_temp=30):
+    def __init__(self, name, url, username, password, min_temp=10, max_temp=30):
         _LOGGER.debug("HeatPumpEntity()")
         self._name = name
         self._url = url
-        self._api_key = api_key
         self._username = username
         self._password = password
         self._min_temp = min_temp
@@ -130,25 +129,28 @@ class HeatPumpEntity(ClimateEntity):
 
     def update(self):
         _LOGGER.debug("HeatPumpEntity.update()")
-        try:
-            response = requests.get(
-                f"{self._url}/status",
-                params={
-                    "api_key": self._api_key,
-                    "username": self._username,
-                    "password": self._password,
-                },
-            )
-            if response.status_code == 200:
-                data = response.json()
-                self._current_temperature = data.get("current_temperature")
-                self._target_temperature = data.get("target_temperature")
-                self._hvac_mode = data.get("hvac_mode", const.HVACMode.OFF)
-                self._available = True
-            else:
-                self._available = False
-        except requests.RequestException as e:
-            _LOGGER.error("Error fetching data from heat pump API: %s", e)
-            self._available = False
+        _LOGGER.info("let's login part 1")
+        _LOGGER.info("let's login part 2")
+        _LOGGER.info("let's fetch all stats")
+        # try:
+        #     response = requests.get(
+        #         f"{self._url}/status",
+        #         params={
+        #             "api_key": self._api_key,
+        #             "username": self._username,
+        #             "password": self._password,
+        #         },
+        #     )
+        #     if response.status_code == 200:
+        #         data = response.json()
+        #         self._current_temperature = data.get("current_temperature")
+        #         self._target_temperature = data.get("target_temperature")
+        #         self._hvac_mode = data.get("hvac_mode", const.HVACMode.OFF)
+        #         self._available = True
+        #     else:
+        #         self._available = False
+        # except requests.RequestException as e:
+        #     _LOGGER.error("Error fetching data from heat pump API: %s", e)
+        #     self._available = False
 
 _LOGGER.debug("initialization done")
