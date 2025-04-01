@@ -1,9 +1,7 @@
 # <config_dir>/custom_components/es/__init__.py
 from __future__ import annotations
-
 import logging
 from datetime import timedelta
-
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -25,6 +23,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     )
     _LOGGER.debug(f'async_setup_entry:{api=}')
 
+    # Verify authentication works during setup
+    try:
+        await api.authenticate()
+    except Exception as err:
+        _LOGGER.error("Initial authentication failed: %s", err)
+        return False
+
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
@@ -39,7 +44,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})
     _LOGGER.debug('async_setup_entry:hass.data.setdefault(DOMAIN, {})')
-    hass.data[DOMAIN][entry.entry_id] = coordinator
+    hass.data[DOMAIN][entry.entry_id] = {
+        "coordinator": coordinator,
+        "api": api
+    }
     _LOGGER.debug('async_setup_entry:hass.data[DOMAIN][entry.entry_id] = coordinator')
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
