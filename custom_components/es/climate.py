@@ -1,15 +1,13 @@
-# <config_dir>/custom_components/heatpump_cloud/climate.py
+# <config_dir>/custom_components/es/climate.py
 from homeassistant.components.climate import ClimateEntity
-from homeassistant.components.climate.const import (
-    HVAC_MODE_HEAT,
-    HVAC_MODE_COOL,
-    HVAC_MODE_OFF,
-    SUPPORT_TARGET_TEMPERATURE,
-)
+from homeassistant.components.climate.const import HVACMode
 from homeassistant.const import TEMP_CELSIUS, ATTR_TEMPERATURE
 
 from .const import DOMAIN
 
+HVAC_MODE_HEAT = HVACMode.HEAT
+HVAC_MODE_COOL = HVACMode.COOL
+HVAC_MODE_OFF = HVACMode.OFF
 SUPPORTED_MODES = [HVAC_MODE_HEAT, HVAC_MODE_COOL, HVAC_MODE_OFF]
 
 
@@ -26,7 +24,7 @@ class HeatPumpClimate(ClimateEntity):
         self.coordinator = coordinator
         self._attr_name = "Heat Pump"
         self._attr_temperature_unit = TEMP_CELSIUS
-        self._attr_supported_features = SUPPORT_TARGET_TEMPERATURE
+        # self._attr_supported_features = SUPPORT_TARGET_TEMPERATURE
         self._attr_hvac_modes = SUPPORTED_MODES
 
     @property

@@ -1,4 +1,4 @@
-# <config_dir>/custom_components/heatpump_cloud/api.py
+# <config_dir>/custom_components/es/api.py
 import logging
 import aiohttp
 
@@ -16,6 +16,7 @@ class HeatPumpCloudAPI:
 
     async def authenticate(self):
         """Authenticate with the API."""
+        return # TODO actually check it
         await self._session.post(
             f"{self._api_url}/login",
             json={"username": self._username, "password": self._password}

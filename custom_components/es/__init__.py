@@ -1,4 +1,4 @@
-# <config_dir>/custom_components/heatpump_cloud/__init__.py
+# <config_dir>/custom_components/es/__init__.py
 from __future__ import annotations
 
 import logging

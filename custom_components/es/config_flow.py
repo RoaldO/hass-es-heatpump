@@ -1,4 +1,4 @@
-# <config_dir>/custom_components/heatpump_cloud/config_flow.py
+# <config_dir>/custom_components/es/config_flow.py
 from __future__ import annotations
 
 import logging
