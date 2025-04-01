@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b67ee599-b65f-4e9e-ab7b-b71f314743fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/hass-es-heatpump.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/climate.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/climate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/config_flow.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/config_flow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/const.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_components/heatpump_cloud/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/es/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/es/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_components/es/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/custom_components/es/manifest.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +43,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Shell Script.deploy.sh.executor": "Run",
-    "git-widget-placeholder": "94d4c721",
+    "git-widget-placeholder": "customized__steps",
     "last_opened_file_path": "/home/roald/Projects/hass-es-heatpump"
   }
 }]]></component>

@@ -16,6 +16,8 @@ class HeatPumpCloudAPI:
 
     async def authenticate(self):
         """Authenticate with the API."""
+        _LOGGER.debug('authenticate')
+        
         return # TODO actually check it
         await self._session.post(
             f"{self._api_url}/login",
@@ -24,11 +26,13 @@ class HeatPumpCloudAPI:
 
     async def async_get_status(self):
         """Get current status from API."""
+        _LOGGER.debug('async_get_status')
         async with self._session.get(f"{self._api_url}/status") as resp:
             return await resp.json()
 
     async def async_set_temperature(self, temperature: float):
         """Set target temperature."""
+        _LOGGER.debug('async_set_temperature')
         await self._session.post(
             f"{self._api_url}/temperature",
             json={"temperature": temperature}
@@ -36,6 +40,7 @@ class HeatPumpCloudAPI:
 
     async def async_set_mode(self, mode: str):
         """Set operation mode."""
+        _LOGGER.debug('async_set_mode')
         await self._session.post(
             f"{self._api_url}/mode",
             json={"mode": mode}
@@ -43,4 +48,5 @@ class HeatPumpCloudAPI:
 
     async def close(self):
         """Close the session."""
+        _LOGGER.debug('close')
         await self._session.close()
