@@ -1,5 +1,6 @@
-# <config_dir>/custom_components/es/api.py
+import base64
 import logging
+
 import aiohttp
 
 _LOGGER = logging.getLogger(__name__)
@@ -17,12 +18,15 @@ class HeatPumpCloudAPI:
     async def authenticate(self):
         """Authenticate with the API."""
         _LOGGER.debug('authenticate')
-        
-        return # TODO actually check it
-        await self._session.post(
-            f"{self._api_url}/login",
-            json={"username": self._username, "password": self._password}
+
+        result = await self._session.post(
+            f"{self._api_url}/a/login",
+            json={
+                "username": str(base64.b64encode(self._username.encode("UTF-8"))),
+                "password": str(base64.b64encode(self._password.encode("UTF-8")))
+            }
         )
+        _LOGGER.debug(f'authenticate:{result.text()=}')
 
     async def async_get_status(self):
         """Get current status from API."""
