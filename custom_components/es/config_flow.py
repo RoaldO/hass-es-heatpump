@@ -25,7 +25,7 @@ class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
                 _LOGGER.error("Authentication failed: %s", err)
                 errors["base"] = "invalid_auth"
             except Exception as err:
-                _LOGGER.exception("Unexpected error")
+                _LOGGER.exception(err)
                 errors["base"] = "unknown"
 
         return self.async_show_form(

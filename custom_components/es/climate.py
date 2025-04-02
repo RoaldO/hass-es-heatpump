@@ -1,19 +1,23 @@
 # <config_dir>/custom_components/es/climate.py
+import logging
 import typing
 
 from homeassistant.components.climate import ClimateEntity
 
+from . import const
+
 if typing.TYPE_CHECKING:
     from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from . import const
 
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """Setup climate platform with API instance"""
     data = hass.data[const.DOMAIN][config_entry.entry_id]
-    async_add_entities([HeatPumpClimate(data["coordinator"], data["api"])])
+    heat_pump = HeatPumpClimate(data["coordinator"], data["api"])
+    async_add_entities([heat_pump])
 
 
 class HeatPumpClimate(ClimateEntity):
@@ -29,11 +33,15 @@ class HeatPumpClimate(ClimateEntity):
 
     @property
     def current_temperature(self):
-        return self.coordinator.data.get("current_temp") if self.coordinator.data else None
+        current_temperature = self.coordinator.data.get("current_temp") if self.coordinator.data else None
+        _LOGGER.debug(f"{current_temperature=}")
+        return current_temperature
 
     @property
     def target_temperature(self):
-        return self.coordinator.data.get("target_temp") if self.coordinator.data else None
+        target_temperature = self.coordinator.data.get("target_temp") if self.coordinator.data else None
+        _LOGGER.debug(f"{target_temperature=}")
+        return target_temperature
 
     @property
     def hvac_mode(self):

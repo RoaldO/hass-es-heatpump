@@ -1,6 +1,6 @@
+import homeassistant.components.climate.const
 import homeassistant.const
 import voluptuous as vol
-from homeassistant.components.climate.const import HVACMode
 
 DOMAIN = "es"
 PLATFORMS = ["climate"]

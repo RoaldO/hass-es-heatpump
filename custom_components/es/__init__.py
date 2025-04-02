@@ -38,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     _LOGGER.debug(f'async_setup_entry:{coordinator=}')
 
     await coordinator.async_config_entry_first_refresh()
-    _LOGGER.debug(f'async_setup_entry:async_config_entry_first_refresh()')
+    _LOGGER.debug('async_setup_entry:async_config_entry_first_refresh()')
 
     hass.data.setdefault(const.DOMAIN, {})
     _LOGGER.debug('async_setup_entry:hass.data.setdefault(DOMAIN, {})')

@@ -1,7 +1,9 @@
 import base64
 import logging
-from .exceptions import AuthenticationError
+
 import aiohttp
+
+from .exceptions import AuthenticationError
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,12 +24,15 @@ class HeatPumpCloudAPI:
             # First authentication step to specific login endpoint
             async with self._session.post(
                     f"{self._api_url}/a/login",
-                    json={
-                        "username": str(base64.b64encode(self._username.encode("UTF-8"))),
-                        "password": str(base64.b64encode(self._password.encode("UTF-8")))
+                    data={
+                        "username": _base64_encode(self._username),
+                        "password": _base64_encode(self._password),
+                        "validCode": "",
+                        "loginValidCode": "",
+                        "__url": ""
                     }
             ) as response:
-                if response.status != 200:
+                if not response.ok:
                     raise AuthenticationError("Invalid credentials")
 
             # Second step to get session cookie (using base API URL)
@@ -47,7 +52,10 @@ class HeatPumpCloudAPI:
     async def async_get_status(self):
         """Get current status from API."""
         _LOGGER.debug('async_get_status')
-        return # TODO NOT YET!
+        return {
+            "current_temp": 19.5,
+            "target_temp": 20.0
+        }
         #async with self._session.get(f"{self._api_url}/status") as resp:
         #    return await resp.json()
 
@@ -71,3 +79,7 @@ class HeatPumpCloudAPI:
         """Close the session."""
         _LOGGER.debug('close')
         await self._session.close()
+
+
+def _base64_encode(input_value: str) -> str:
+    return base64.b64encode(input_value.encode("UTF-8")).decode("UTF-8")
