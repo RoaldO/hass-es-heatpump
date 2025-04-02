@@ -1,20 +1,13 @@
 # <config_dir>/custom_components/es/config_flow.py
 from __future__ import annotations
 import logging
-import voluptuous as vol
 from homeassistant import config_entries
 from .api import HeatPumpCloudAPI, AuthenticationError
-from .const import DOMAIN
+from . import const
 
 _LOGGER = logging.getLogger(__name__)
 
-AUTH_SCHEMA = vol.Schema({
-    vol.Required("username"): str,
-    vol.Required("password"): str,
-    vol.Required("api_url", default="https://www.myheatpump.com"): str,
-})
-
-class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
 
     async def async_step_user(self, user_input=None):
         errors = {}
@@ -37,6 +30,6 @@ class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=AUTH_SCHEMA,
+            data_schema=const.AUTH_SCHEMA,
             errors=errors
         )

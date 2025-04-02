@@ -21,7 +21,7 @@ class HeatPumpCloudAPI:
         try:
             # First authentication step to specific login endpoint
             async with self._session.post(
-                    "https://www.myheatpump.com/a/login",
+                    f"{self._api_url}/a/login",
                     json={
                         "username": str(base64.b64encode(self._username.encode("UTF-8"))),
                         "password": str(base64.b64encode(self._password.encode("UTF-8")))

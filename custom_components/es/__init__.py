@@ -7,11 +7,9 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .api import HeatPumpCloudAPI
-from .const import DOMAIN
+from . import const
 
 _LOGGER = logging.getLogger(__name__)
-
-PLATFORMS = ["climate"]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up heatpump cloud from a config entry."""
@@ -42,14 +40,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.async_config_entry_first_refresh()
     _LOGGER.debug(f'async_setup_entry:async_config_entry_first_refresh()')
 
-    hass.data.setdefault(DOMAIN, {})
+    hass.data.setdefault(const.DOMAIN, {})
     _LOGGER.debug('async_setup_entry:hass.data.setdefault(DOMAIN, {})')
-    hass.data[DOMAIN][entry.entry_id] = {
+    hass.data[const.DOMAIN][entry.entry_id] = {
         "coordinator": coordinator,
         "api": api
     }
     _LOGGER.debug('async_setup_entry:hass.data[DOMAIN][entry.entry_id] = coordinator')
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    await hass.config_entries.async_forward_entry_setups(entry, const.PLATFORMS)
     _LOGGER.debug('hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)')
     return True
