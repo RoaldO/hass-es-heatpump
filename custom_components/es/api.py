@@ -1,8 +1,14 @@
+"""
+module that takes care of the http communication with the myheatpump.com cloud
+service.
+"""
 import base64
 import logging
+import random
 
 import aiohttp
 
+from . import const
 from .exceptions import AuthenticationError
 
 _LOGGER = logging.getLogger(__name__)
@@ -11,7 +17,12 @@ _LOGGER = logging.getLogger(__name__)
 class HeatPumpCloudAPI:
     """API client for heat pump cloud service."""
 
-    def __init__(self, username: str, password: str, api_url: str):
+    def __init__(
+            self, *,
+            username: str,
+            password: str,
+            api_url: str,
+    ):
         self._username = username
         self._password = password
         self._api_url = api_url
@@ -53,8 +64,14 @@ class HeatPumpCloudAPI:
         """Get current status from API."""
         _LOGGER.debug('async_get_status')
         return {
-            "current_temp": 19.5,
-            "target_temp": 20.0
+            "current_temp": random.randrange(150, 210) / 10,
+            "target_temp": random.choice([16.0, 20.0]),
+            "mode": random.choice([
+                const.HVAC_MODE_OFF,
+                const.HVAC_MODE_HEAT,
+                const.HVAC_MODE_COOL,
+                const.HVAC_MODE_SANITARY_HOT_WATER,
+            ]),
         }
         #async with self._session.get(f"{self._api_url}/status") as resp:
         #    return await resp.json()

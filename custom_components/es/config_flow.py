@@ -15,9 +15,9 @@ class HeatPumpConfigFlow(config_entries.ConfigFlow, domain=const.DOMAIN):
         if user_input is not None:
             try:
                 api = HeatPumpCloudAPI(
-                    user_input["username"],
-                    user_input["password"],
-                    user_input["api_url"]
+                    username=user_input["username"],
+                    password=user_input["password"],
+                    api_url=user_input["api_url"]
                 )
                 await api.authenticate()
                 return self.async_create_entry(title="Heat Pump Cloud", data=user_input)
